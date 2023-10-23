@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import LoadingView from "./LoadingView";
 import toast from "react-hot-toast/headless";
 import QuestionsView from "./Quiz/QuestionsView";
-
+import { checkoutWidgets } from "@imtbl/sdk";
+import { passportInstance } from "@/lib/immutable";
 const GameView: React.FC = () => {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
 
@@ -31,8 +32,11 @@ const GameView: React.FC = () => {
     startGame(); // Start a new game
   };
 
+  checkoutWidgets.CheckoutWidgets();
+
   return (
     <div className="flex flex-col items-center justify-center h-full">
+      <checkoutWidgets.SwapReact passport={passportInstance} />
       {questions.length === 0 && !loading && (
         <motion.div
           variants={{
@@ -54,7 +58,6 @@ const GameView: React.FC = () => {
         </motion.div>
       )}
       {loading && <LoadingView />}
-
       {questions.length > 0 && !loading && (
         <motion.div
           initial={{ opacity: 0 }}

@@ -4,7 +4,7 @@ import { config, passport } from "@imtbl/sdk";
 import { ethers } from "ethers";
 
 const passportConfig = {
-  clientId: "v8z9guoHHStuTeybmudEV9g3m2cXG94r",
+  clientId: "B7nY61QpTuUzI3hPTTihBCmEvRHfkWxE",
   redirectUri: "http://localhost:3000/callback",
   logoutRedirectUri: "http://localhost:3000/",
   scope: "transact openid offline_access email",

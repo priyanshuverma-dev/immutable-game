@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { FishSymbol, Rocket, Sun, Umbrella } from "lucide-react";
@@ -45,13 +47,12 @@ const LoadingView: React.FC = () => {
   const tipControls = useAnimation();
 
   useEffect(() => {
-    textControls.start({ opacity: 0, x: -20 });
-    tipControls.start({ opacity: 0, x: -20 });
-    setTimeout(() => {
-      textControls.start({ opacity: 1, x: 0 });
-      tipControls.start({ opacity: 1, x: 0 });
+    // Start animations after the component has mounted
+    setTimeout(async () => {
+      await textControls.start({ opacity: 1, x: 0 });
+      await tipControls.start({ opacity: 1, x: 0 });
     }, 300);
-  }, [currentFunnyWord, currentTip]);
+  }, [currentFunnyWord, currentTip, textControls, tipControls]);
 
   return (
     <div className="text-center p-4 flex items-center justify-centers flex-col">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import ResultView from "./ResultView";
+import toast from "react-hot-toast";
 
 const QuestionsView = ({
   questions,
@@ -19,20 +20,18 @@ const QuestionsView = ({
 
   const handleAnswerClick = (selectedAnswer: string) => {
     const currentQuestion = questions[currentQuestionIndex];
-
     const correctAnswerKeys = Object.entries(
       currentQuestion.correct_answers
     ).filter(([key, value]) => value === "true");
 
     const usersAnswer = `${selectedAnswer}_correct`;
-
     const isCorrect = correctAnswerKeys.map(([key, value]) => {
       return usersAnswer === key;
     });
 
     if (isCorrect.includes(true)) {
-      console.log("Correct");
-      setScore(score + 1);
+      toast.success("Correct Answer!");
+      setScore((prev) => prev + 1);
     }
 
     if (currentQuestionIndex < questions.length - 1) {
