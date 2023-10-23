@@ -50,7 +50,7 @@ const LoadingView: React.FC = () => {
     setTimeout(() => {
       textControls.start({ opacity: 1, x: 0 });
       tipControls.start({ opacity: 1, x: 0 });
-    }, 200);
+    }, 300);
   }, [currentFunnyWord, currentTip]);
 
   return (

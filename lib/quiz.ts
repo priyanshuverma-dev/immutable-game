@@ -32,7 +32,6 @@ export const fetchQuestion = async (category?: string, difficulty?: string) => {
 };
 
 export const startQuiz = async () => {
-  const questions = await fetchQuestion();
-
+  const questions = await fetchQuestion("Linux", "Easy");
   return questions;
 };

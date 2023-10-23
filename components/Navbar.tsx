@@ -1,41 +1,16 @@
 "use client";
 
-import { isAuthenticated, passportInstance } from "@/lib/immutable";
-import { redirect } from "next/navigation";
-import React, { useEffect, useState } from "react";
-
-interface UserProfile {
-  nickname?: string;
-  email?: string;
-  sub?: string;
-  accessToken?: string;
-  idToken?: string;
-}
+import { passportInstance } from "@/lib/immutable";
+import { useState } from "react";
 
 const Navbar = () => {
-  const [user, setUser] = useState<UserProfile | undefined>();
+  const [score, setScore] = useState(0);
 
-  const fetchUser = async () => {
-    try {
-      const userProfile = await passportInstance.getUserInfo();
-      const accessToken = await passportInstance.getAccessToken();
-      const idToken = await passportInstance.getIdToken();
+  setInterval(() => {
+    setScore(JSON.parse(localStorage.getItem("score") || "0"));
+  }, 200);
 
-      setUser({
-        sub: userProfile?.sub,
-        email: userProfile?.email,
-        nickname: userProfile?.nickname,
-        accessToken: accessToken,
-        idToken: idToken,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
+  // const score = localStorage.getItem("score");
 
   return (
     <nav className="flex justify-between items-center p-2 bg-gray-300 border-b">
@@ -44,12 +19,19 @@ const Navbar = () => {
           🌟 D-Quiz
         </h1>
       </div>
-      <button
-        className="bg-red-500 hover:bg-red-700 transition-colors  text-white rounded-md p-2"
-        onClick={() => passportInstance.logout()}
-      >
-        Logout
-      </button>
+      <div className="flex flex-row items-center justify-center ">
+        {score != 0 && (
+          <p className="text-xl font-semibold text-gray-800 pr-5">
+            Score: {score * 10}
+          </p>
+        )}
+        <button
+          className="bg-red-500 hover:bg-red-700 transition-colors  text-white rounded-md p-2"
+          onClick={() => passportInstance.logout()}
+        >
+          Logout
+        </button>
+      </div>
     </nav>
   );
 };

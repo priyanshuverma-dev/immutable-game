@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import ResultView from "./ResultView";
 
 const QuestionsView = ({
@@ -12,25 +11,29 @@ const QuestionsView = ({
   resetGame: () => void;
   mainMenu: () => void;
 }) => {
-  const router = useRouter();
-
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const currentQuestion = questions[currentQuestionIndex];
   const [animateQuestion, setAnimateQuestion] = useState(true);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
 
   const handleAnswerClick = (selectedAnswer: string) => {
     const currentQuestion = questions[currentQuestionIndex];
-    if (
-      currentQuestion.correct_answers.answer_d_correct &&
-      selectedAnswer === "answer_d"
-    ) {
+
+    const correctAnswerKeys = Object.entries(
+      currentQuestion.correct_answers
+    ).filter(([key, value]) => value === "true");
+
+    const usersAnswer = `${selectedAnswer}_correct`;
+
+    const isCorrect = correctAnswerKeys.map(([key, value]) => {
+      return usersAnswer === key;
+    });
+
+    if (isCorrect.includes(true)) {
+      console.log("Correct");
       setScore(score + 1);
     }
-
-    setSelectedAnswer(selectedAnswer);
 
     if (currentQuestionIndex < questions.length - 1) {
       setAnimateQuestion(false);
@@ -38,10 +41,15 @@ const QuestionsView = ({
       setTimeout(() => {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setAnimateQuestion(true);
-        setSelectedAnswer(null);
       }, 500);
     } else {
+      console.log("Final Score: ", score, " / ", questions.length);
       setShowResult(true);
+      const prev = localStorage.getItem("score");
+      localStorage.setItem(
+        "score",
+        JSON.stringify(score + parseInt(prev || "0"))
+      );
     }
   };
 
@@ -84,13 +92,7 @@ const QuestionsView = ({
             <motion.li
               key={answerKey}
               onClick={() => handleAnswerClick(answerKey)}
-              className={`cursor-pointer py-2 px-4 rounded ${
-                answerKey === "answer_d" && selectedAnswer === answerKey
-                  ? "bg-green-500 text-white"
-                  : answerKey === selectedAnswer
-                  ? "bg-red-500 text-white"
-                  : "bg-blue-500 hover:bg-blue-700 text-white"
-              }`}
+              className={`cursor-pointer py-2 px-4 rounded bg-blue-500 hover:bg-blue-700 text-white`}
               initial={
                 animateQuestion && index === 0
                   ? { opacity: 0, x: -20 }

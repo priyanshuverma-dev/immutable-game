@@ -23,6 +23,7 @@ const ResultView = ({
       <p className="text-xl">
         You scored {score} out of {totalQuestions}.
       </p>
+      <p className="text-xl">You Got {score * 10} Points.</p>
       <div className="flex flex-col ">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
